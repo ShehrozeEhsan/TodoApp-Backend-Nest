@@ -1,4 +1,3 @@
-import { User } from 'src/user/entities/user.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 
@@ -16,6 +15,6 @@ export class Todo {
   @Column({ default: false })
   completionStatus: boolean;
 
-  @ManyToOne(() => User, user => user.todos)
-  user: User;
+  @Column()
+  userId: number;
 }

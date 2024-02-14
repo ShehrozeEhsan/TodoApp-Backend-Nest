@@ -7,27 +7,32 @@ import { UpdateTodoDto } from './dto/update-todo.dto';
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
-  @Post()
+  @Post('create-todo')
   create(@Body() createTodoDto: CreateTodoDto) {
     return this.todoService.create(createTodoDto);
   }
 
-  @Get()
-  findAll() {
-    return this.todoService.findAll();
+  @Get('get-all-pending/:id')
+  findAllPendng(@Param('id') id: number) {
+    return this.todoService.findAllPending(id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.todoService.findOne(+id);
+  @Get('get-all-completed/:id')
+  findAllCompleted(@Param('id') id: number) {
+    return this.todoService.findAllCompleted(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodoDto: UpdateTodoDto) {
-    return this.todoService.update(+id, updateTodoDto);
+  @Patch('edit/:id')
+  update(@Param('id') id: number, @Body() updateTodoDto: UpdateTodoDto) {
+    return this.todoService.update(id, updateTodoDto);
   }
 
-  @Delete(':id')
+  @Patch('update-status/:id')
+  updateStatus(@Param('id') id: number) {
+    return this.todoService.updateStatus(id);
+  }
+
+  @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.todoService.remove(+id);
   }
