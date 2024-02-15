@@ -54,6 +54,13 @@ export class TodoService {
     await this.todoRepository.save(todo);
   }
 
+  async updateStatusToPending(id: number) {
+    const todo = await this.todoRepository.findOneBy({todoId: id});
+    console.log(todo)
+    todo.completionStatus = false;
+    await this.todoRepository.save(todo);
+  }
+
   async remove(id: number) {
     await this.todoRepository.delete(id);
   }

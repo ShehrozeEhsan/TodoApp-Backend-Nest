@@ -32,6 +32,11 @@ export class TodoController {
     return this.todoService.updateStatus(id);
   }
 
+  @Patch('update-status-to-pending/:id')
+  updateStatusToPending(@Param('id') id: number) {
+    return this.todoService.updateStatusToPending(id);
+  }
+
   @Delete('delete/:id')
   remove(@Param('id') id: string) {
     return this.todoService.remove(+id);
