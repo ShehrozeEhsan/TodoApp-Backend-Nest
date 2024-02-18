@@ -1,19 +1,21 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { TodoService } from './todo.service';
-import { CreateTodoDto } from './dto/create-todo.dto';
-import { UpdateTodoDto } from './dto/update-todo.dto';
+import { TodoService } from '../service/todo.service';
+import { CreateTodoDto } from 'src/DTO/todo/create-todo';
+import { UpdateTodoDto } from 'src/DTO/todo/update-todo';
+import { ApiResponse } from 'src/common/api-response';
+
 
 @Controller('todo')
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
   @Post('create-todo')
-  create(@Body() createTodoDto: CreateTodoDto) {
+  create(@Body() createTodoDto: CreateTodoDto): Promise<ApiResponse> {
     return this.todoService.create(createTodoDto);
   }
 
   @Get('get-all-pending/:id')
-  findAllPendng(@Param('id') id: number) {
+  findAllPending(@Param('id') id: number) {
     return this.todoService.findAllPending(id);
   }
 

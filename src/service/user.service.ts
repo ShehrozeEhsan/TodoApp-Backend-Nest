@@ -1,19 +1,20 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { User } from '../model/user.entity';
 import { Repository } from 'typeorm';
-import { LoginSuccessDto } from './dto/login-success.dto';
-import { UserLoginDetails } from './utils/user-login-details';
+import { LoginSuccessDto } from '../DTO/user/login-success';
+import { UserLoginDetails } from '../DTO/user/user-login-request';
+import { ApiResponse } from 'src/common/api-response';
 
 @Injectable()
 export class UserService {
 
   constructor(@InjectRepository(User) private readonly userRepository: Repository<User>){}
 
-  async login(userLoginDetails: UserLoginDetails): Promise<LoginSuccessDto> {
+  async login(userLoginDetails: UserLoginDetails): Promise<ApiResponse> {
     const user: User = await this.userRepository.findOneBy({username: userLoginDetails.username});
     if(!user){
-      throw new NotFoundException("No user found");
+      return new ApiResponse(false, 404, "User not found", null);
     } else {
       if(user.password === userLoginDetails.password){
         const { userId, fullName } = user;
@@ -21,9 +22,9 @@ export class UserService {
           userId,
           fullName
         };
-        return loginSuccessDto;
+        return new ApiResponse(true, 200, "User authenticated successfully", loginSuccessDto); 
       } else {
-        throw new UnauthorizedException("Authorization failed")
+        return new ApiResponse(false, 401, "Wrong password", null);
       }
     }
   }

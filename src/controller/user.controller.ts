@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UserService } from './user.service';
-import { LoginSuccessDto } from './dto/login-success.dto';
-import { UserLoginDetails } from './utils/user-login-details';
+import { UserService } from '../service/user.service';
+import { UserLoginDetails } from '../DTO/user/user-login-request';
+import { ApiResponse } from 'src/common/api-response';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('login')
-  async login(@Body() UserLoginDetails: UserLoginDetails): Promise<LoginSuccessDto> {
+  async login(@Body() UserLoginDetails: UserLoginDetails): Promise<ApiResponse> {
     return await this.userService.login(UserLoginDetails);
   }
   

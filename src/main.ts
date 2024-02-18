@@ -7,7 +7,7 @@ async function bootstrap() {
 
   // Enable CORS with options to allow requests from all origins
   const corsOptions: CorsOptions = {
-    origin: 'http://192.168.100.35:3001',
+    origin: 'http://localhost:3001',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 204,
