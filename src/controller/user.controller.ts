@@ -7,9 +7,5 @@ import { ApiResponse } from 'src/common/api-response';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('login')
-  async login(@Body() UserLoginDetails: UserLoginDetails): Promise<ApiResponse> {
-    return await this.userService.login(UserLoginDetails);
-  }
-  
+
 }

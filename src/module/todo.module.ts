@@ -9,5 +9,6 @@ import { User } from 'src/model/user.entity';
   imports: [TypeOrmModule.forFeature([Todo,User])],
   controllers: [TodoController],
   providers: [TodoService],
+  exports: [TodoService]
 })
 export class TodoModule {}

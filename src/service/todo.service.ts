@@ -27,6 +27,7 @@ export class TodoService {
         return new ApiResponse(true, 201, 'Todo created successfully', null);
       }
     } catch (ex) {
+      console.log(ex);
       return new ApiResponse(false, 500, 'Error creating Todo', null);
     }
   }

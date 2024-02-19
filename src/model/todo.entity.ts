@@ -21,12 +21,12 @@ export class Todo {
   @UpdateDateColumn()
   updatedDate: Date;
 
-  @Column()
-  updatedBy: number;
+  @Column({ default: -1 })
+  updatedBy: number;  
 
   @DeleteDateColumn()
   deletedDate: Date
 
-  @Column()
+  @Column({default:-1})
   deletedBy: number;
 }
