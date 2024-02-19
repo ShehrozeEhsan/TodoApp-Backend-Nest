@@ -9,6 +9,7 @@ import {
   UseGuards,
   Header,
   Req,
+  Query,
 } from '@nestjs/common';
 import { TodoService } from '../service/todo.service';
 import { CreateTodoDto } from 'src/DTO/todo/create-todo';
@@ -16,6 +17,7 @@ import { UpdateTodoDto } from 'src/DTO/todo/update-todo';
 import { ApiResponse } from 'src/common/api-response';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { Request } from 'express';
+import { PaginationDto } from 'src/DTO/todo/pagination';
 
 @UseGuards(AuthGuard)
 @Controller('todo')
@@ -32,10 +34,17 @@ export class TodoController {
   }
 
   @Get('get-all-pending')
-  findAllPending(@Req() request: Request): Promise<ApiResponse> {
+  findAllPending(@Query() paginationDto: PaginationDto ,@Req() request: Request): Promise<ApiResponse> {
     const accessToken = request.accessToken;
-    return this.todoService.findAllPending(accessToken);
+    return this.todoService.findAllPending(paginationDto,accessToken);
   }
+
+  @Get('get-all-pending-count')
+  findAllPendingCount(@Req() request: Request): Promise<ApiResponse> {
+    const accessToken = request.accessToken;
+    return this.todoService.findAllPendingCount(accessToken);
+  }
+
 
   @Get('get-all-completed')
   findAllCompleted(@Req() request: Request): Promise<ApiResponse> {

@@ -8,6 +8,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 import { ApiResponse } from 'src/common/api-response';
 import { User } from 'src/model/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { PaginationDto } from 'src/DTO/todo/pagination';
+import { DEFAULT_PAGE_SIZE } from 'src/common/pagination-defaults';
 
 @Injectable()
 export class TodoService {
@@ -40,10 +42,12 @@ export class TodoService {
     }
   }
 
-  async findAllPending(access_token: string): Promise<ApiResponse> {
+  async findAllPending(paginationDto: PaginationDto ,access_token: string): Promise<ApiResponse> {
     try {
       const decodedToken = this.jwtService.decode(access_token);
       const userId = decodedToken.sub;
+      const { limit , offset } = paginationDto;
+      const pageNumber = offset * limit;
       const todos = await this.todoRepository.find({
         where: {
           userId,
@@ -52,6 +56,8 @@ export class TodoService {
         order: {
           createdAt: 'ASC',
         },
+        skip: pageNumber,
+        take: limit ?? DEFAULT_PAGE_SIZE.todo,
       });
 
       if (todos.length === 0) {
@@ -66,6 +72,22 @@ export class TodoService {
       }
     } catch (ex) {
       return new ApiResponse(false, 500, 'Error fetching Todos', null);
+    }
+  }
+
+  async findAllPendingCount(access_token: string): Promise<ApiResponse> {
+    try {
+      const decodedToken = this.jwtService.decode(access_token);
+      const userId = decodedToken.sub;
+      const count = await this.todoRepository.count({
+        where: {
+          userId,
+          completionStatus: false,
+        },
+    });
+    return new ApiResponse(true, 200, 'Successfully retrieved count', count)
+  } catch (ex) {
+      return new ApiResponse(false, 500, 'Error fetching Pendng Todos Count', null);
     }
   }
 
@@ -154,4 +176,6 @@ export class TodoService {
       return new ApiResponse(false, 500, 'Error deleting todo', null);
     }
   }
+
+  
 }
