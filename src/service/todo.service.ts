@@ -42,11 +42,14 @@ export class TodoService {
     }
   }
 
-  async findAllPending(paginationDto: PaginationDto ,access_token: string): Promise<ApiResponse> {
+  async findAllPending(
+    paginationDto: PaginationDto,
+    access_token: string,
+  ): Promise<ApiResponse> {
     try {
       const decodedToken = this.jwtService.decode(access_token);
       const userId = decodedToken.sub;
-      const { limit , offset } = paginationDto;
+      const { limit, offset } = paginationDto;
       const pageNumber = offset * limit;
       const todos = await this.todoRepository.find({
         where: {
@@ -84,10 +87,15 @@ export class TodoService {
           userId,
           completionStatus: false,
         },
-    });
-    return new ApiResponse(true, 200, 'Successfully retrieved count', count)
-  } catch (ex) {
-      return new ApiResponse(false, 500, 'Error fetching Pendng Todos Count', null);
+      });
+      return new ApiResponse(true, 200, 'Successfully retrieved count', count);
+    } catch (ex) {
+      return new ApiResponse(
+        false,
+        500,
+        'Error fetching Pendng Todos Count',
+        null,
+      );
     }
   }
 
@@ -176,6 +184,4 @@ export class TodoService {
       return new ApiResponse(false, 500, 'Error deleting todo', null);
     }
   }
-
-  
 }

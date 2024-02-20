@@ -18,6 +18,8 @@ import { ApiResponse } from 'src/common/api-response';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { Request } from 'express';
 import { PaginationDto } from 'src/DTO/todo/pagination';
+import { Roles } from 'src/common/roles.decorator';
+import { Role } from 'src/common/role.enum';
 
 @UseGuards(AuthGuard)
 @Controller('todo')
@@ -68,6 +70,7 @@ export class TodoController {
   }
 
   @Delete('delete/:id')
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.todoService.remove(+id);
   }

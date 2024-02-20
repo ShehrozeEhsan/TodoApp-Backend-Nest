@@ -15,4 +15,6 @@ export class User {
   @Column()
   fullName: string;
 
+  @Column("simple-array")
+  roles: string[];
 }

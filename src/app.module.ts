@@ -7,12 +7,19 @@ import { AuthModule } from './module/auth.module';
 import { AuthMiddleware } from './middleware.ts/auth.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guard/roles.guard';
 
 
 @Module({
   imports: [TypeOrmModule.forRoot(dataSourceOptions), TodoModule, UserModule, AuthModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
