@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  Header,
   Req,
   Query,
 } from '@nestjs/common';
@@ -31,27 +30,24 @@ export class TodoController {
     @Req() request: Request,
     @Body() createTodoDto: CreateTodoDto,
   ): Promise<ApiResponse> {
-    const accessToken = request.accessToken;
-    return this.todoService.create(accessToken, createTodoDto);
+    return this.todoService.create(request.user.sub, createTodoDto);
   }
 
+  @Roles(Role.USER)
   @Get('get-all-pending')
   findAllPending(@Query() paginationDto: PaginationDto ,@Req() request: Request): Promise<ApiResponse> {
-    const accessToken = request.accessToken;
-    return this.todoService.findAllPending(paginationDto,accessToken);
+    return this.todoService.findAllPending(paginationDto,request.user.sub);
   }
 
   @Get('get-all-pending-count')
   findAllPendingCount(@Req() request: Request): Promise<ApiResponse> {
-    const accessToken = request.accessToken;
-    return this.todoService.findAllPendingCount(accessToken);
+    return this.todoService.findAllPendingCount(request.user.sub);
   }
-
 
   @Get('get-all-completed')
   findAllCompleted(@Req() request: Request): Promise<ApiResponse> {
     const accessToken = request.accessToken;
-    return this.todoService.findAllCompleted(accessToken);
+    return this.todoService.findAllCompleted(request.user.sub);
   }
 
   @Patch('edit/:id')
